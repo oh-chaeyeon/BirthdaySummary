@@ -21,15 +21,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="RYI-fP-jax">
                                 <rect key="frame" x="32" y="517.66666666666652" width="329" height="235.33333333333337"/>
                             </stackView>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="Kvi-Sj-nbt">
-                                <rect key="frame" x="32" y="84" width="329" height="330.33333333333331"/>
-                                <locale key="locale" localeIdentifier="ko"/>
-                                <connections>
-                                    <action selector="changeDatePicker:" destination="BYZ-38-t0r" eventType="valueChanged" id="yvO-NT-EC5"/>
-                                </connections>
-                            </datePicker>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="X3f-o1-PtP">
-                                <rect key="frame" x="32" y="439.33333333333331" width="330" height="68.333333333333314"/>
+                                <rect key="frame" x="32" y="480.99999999999994" width="330" height="68.333333333333314"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="YM7-vz-G0Y">
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="68.333333333333329"/>
@@ -71,24 +64,32 @@
                                     <constraint firstAttribute="bottom" secondItem="aY1-IN-RfN" secondAttribute="bottom" id="hEi-U4-ovT"/>
                                 </constraints>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CPw-KB-PU2">
+                                <rect key="frame" x="32" y="59" width="329" height="410"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="410" id="0IM-zF-TnY"/>
+                                    <constraint firstAttribute="width" constant="330" id="g88-No-BOK"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="CPw-KB-PU2" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="6da-OA-nqz"/>
+                            <constraint firstItem="X3f-o1-PtP" firstAttribute="top" secondItem="CPw-KB-PU2" secondAttribute="bottom" constant="12" id="O4W-a2-Yel"/>
+                            <constraint firstItem="CPw-KB-PU2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="OP5-gl-sIe"/>
                             <constraint firstItem="RYI-fP-jax" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="OPV-ib-vJL"/>
-                            <constraint firstItem="X3f-o1-PtP" firstAttribute="top" secondItem="Kvi-Sj-nbt" secondAttribute="bottom" constant="25" id="Saq-Za-9B5"/>
-                            <constraint firstItem="Kvi-Sj-nbt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="25" id="b49-Rg-9gP"/>
-                            <constraint firstItem="X3f-o1-PtP" firstAttribute="top" secondItem="Kvi-Sj-nbt" secondAttribute="bottom" constant="25" id="dsH-O0-TiM"/>
                             <constraint firstItem="RYI-fP-jax" firstAttribute="top" secondItem="X3f-o1-PtP" secondAttribute="bottom" constant="14" id="fXX-fu-xNn"/>
-                            <constraint firstItem="Kvi-Sj-nbt" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="nYf-Q3-NOd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CPw-KB-PU2" secondAttribute="trailing" constant="32" id="nUM-im-kE0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RYI-fP-jax" secondAttribute="trailing" constant="32" id="pfd-5l-D2z"/>
                             <constraint firstItem="X3f-o1-PtP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="qKb-mv-K3G"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kvi-Sj-nbt" secondAttribute="trailing" constant="32" id="qyK-Xa-BnB"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="캘린더" image="calendar" catalog="system" id="3y6-Fc-Tfi"/>
                     <connections>
                         <outlet property="birthdayStackView" destination="RYI-fP-jax" id="TOI-vN-MIg"/>
+                        <outlet property="calendarContainerView" destination="CPw-KB-PU2" id="Hh1-bu-DmH"/>
                         <outlet property="lblPickerDay1" destination="U9M-pP-XMz" id="ciq-JQ-0iw"/>
                         <outlet property="lblPickerDay2" destination="xD9-0X-Pl3" id="AwX-nh-chn"/>
                     </connections>
@@ -762,7 +763,18 @@
                             <outlet property="delegate" destination="PCE-nG-rNC" id="tLv-sl-NRr"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="일정" id="2K1-Ds-5Vz"/>
+                    <navigationItem key="navigationItem" title="일정" id="2K1-Ds-5Vz">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="byf-q8-ZxH">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="dqw-8i-dCY">
+                                <rect key="frame" x="246" y="6" width="131" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                            </segmentedControl>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QCK-FP-fhd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

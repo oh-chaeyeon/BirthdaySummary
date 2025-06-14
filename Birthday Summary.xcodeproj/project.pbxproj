@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E46331DC2DFC8479006D1F9C /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = E46331DB2DFC8479006D1F9C /* FSCalendar */; };
 		E4D6406A2DF642C700327C71 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E4D640692DF642C700327C71 /* SQLite */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4D6406A2DF642C700327C71 /* SQLite in Frameworks */,
+				E46331DC2DFC8479006D1F9C /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = "Birthday Summary";
 			packageProductDependencies = (
 				E4D640692DF642C700327C71 /* SQLite */,
+				E46331DB2DFC8479006D1F9C /* FSCalendar */,
 			);
 			productName = "Birthday Summary";
 			productReference = E40C20A62DED3CC3002B88C8 /* Birthday Summary.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E4D640682DF642C700327C71 /* XCRemoteSwiftPackageReference "SQLite" */,
+				E46331DA2DFC8479006D1F9C /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E40C20A72DED3CC3002B88C8 /* Products */;
@@ -344,6 +348,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E46331DA2DFC8479006D1F9C /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
 		E4D640682DF642C700327C71 /* XCRemoteSwiftPackageReference "SQLite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
@@ -355,6 +367,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E46331DB2DFC8479006D1F9C /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E46331DA2DFC8479006D1F9C /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
 		E4D640692DF642C700327C71 /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E4D640682DF642C700327C71 /* XCRemoteSwiftPackageReference "SQLite" */;

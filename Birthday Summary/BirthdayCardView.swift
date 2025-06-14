@@ -31,15 +31,15 @@ class BirthdayCardView: UIView {
         self.addGestureRecognizer(tap)
 
         self.layer.cornerRadius = 12
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.systemGray4.cgColor
+        self.layer.borderWidth = 0
+        self.layer.borderColor = UIColor.clear.cgColor
         self.clipsToBounds = true
+
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.1
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowRadius = 4
         self.layer.masksToBounds = false
-
     }
 
     @objc private func handleTap() {
@@ -54,7 +54,9 @@ class BirthdayCardView: UIView {
         categoryLabel.text = entry.category
         categoryLabel.textColor = entry.categoryColor
         
-        self.backgroundColor = entry.categoryColor.withAlphaComponent(0.12)
+        if self.backgroundColor == nil || self.backgroundColor == .clear {
+            self.backgroundColor = entry.categoryColor.withAlphaComponent(0.12)
+        }
     }
 
     override var intrinsicContentSize: CGSize {

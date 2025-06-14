@@ -101,6 +101,7 @@ class Search: UITableViewController, UISearchBarDelegate, AddDayDelegate {
     
     func didSaveBirthday(entry: BirthdayEntry) {
         allEntries.append(entry)
+        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: entry)
         searchBar(searchInput, textDidChange: searchInput.text ?? "")
     }
     
@@ -114,11 +115,13 @@ class Search: UITableViewController, UISearchBarDelegate, AddDayDelegate {
             print("⚠️ 업데이트 실패 – 해당 ID 없음")
         }
 
+        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: entry)
         searchBar(searchInput, textDidChange: searchInput.text ?? "")
     }
     
     func didDeleteBirthday(id: UUID) {
         allEntries.removeAll { $0.id == id }
+        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: id)
         searchBar(searchInput, textDidChange: searchInput.text ?? "")
     }
 }
