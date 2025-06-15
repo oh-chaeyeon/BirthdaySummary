@@ -50,12 +50,20 @@ class BirthdayCardView: UIView {
     func configure(entry: BirthdayEntry) {
         self.entry = entry
         nameLabel.text = entry.name
-        nicknameLabel.text = "별명: \(entry.nickname)"
-        categoryLabel.text = entry.category
+        
+        let nick = entry.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+        if nick.isEmpty {
+            nicknameLabel.isHidden = true
+        } else {
+            nicknameLabel.isHidden = false
+            nicknameLabel.text = "별명: \(nick)"
+        }
+        
+        categoryLabel.text      = entry.category
         categoryLabel.textColor = entry.categoryColor
         
-        if self.backgroundColor == nil || self.backgroundColor == .clear {
-            self.backgroundColor = entry.categoryColor.withAlphaComponent(0.12)
+        if backgroundColor == nil || backgroundColor == .clear {
+            backgroundColor = entry.categoryColor.withAlphaComponent(0.12)
         }
     }
 

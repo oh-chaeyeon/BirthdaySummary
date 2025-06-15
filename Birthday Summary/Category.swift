@@ -7,9 +7,26 @@ protocol CategoryPickerDelegate: AnyObject {
 class Category: UITableViewController {
     
     @IBOutlet var tvListView: UITableView!
-    
+    @IBOutlet weak var deleteBtnBarItem: UIBarButtonItem!
+
+    var fromPicker: Bool = false
     private var list: [CategoryItem] = CategoryStore.shared.sorted()
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if fromPicker {
+            deleteBtnBarItem.title = "이전"
+            deleteBtnBarItem.style = .plain
+            deleteBtnBarItem.target = self
+            deleteBtnBarItem.action = #selector(backToPicker)
+        }
+    }
+    
+    @objc private func backToPicker() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         list = CategoryStore.shared.sorted()
@@ -57,7 +74,7 @@ class Category: UITableViewController {
            let indexPath = tableView.indexPathForSelectedRow {
             dest.editingItem = list[indexPath.row]
         } else if segue.identifier == "toAddNewCategory",
-                  let dest = segue.destination as? AddCategory {
+            let dest = segue.destination as? AddCategory {
             dest.editingItem = nil
         }
     }
@@ -67,6 +84,7 @@ class Category: UITableViewController {
     }
     
     @IBAction func deleteBtn(_ sender: UIBarButtonItem) {
+        guard !fromPicker else { return } 
         let editingNow = !isEditing
         setEditing(editingNow, animated: true)
         sender.title = editingNow ? "Done" : "Delete"

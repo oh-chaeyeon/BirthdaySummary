@@ -30,7 +30,6 @@ final class BirthdayDatabase {
         try? db.execute("PRAGMA journal_mode=WAL")
 
         try? createTable()
-        print("📍 DB Path:", url.path)
     }
 
     private func createTable() throws {

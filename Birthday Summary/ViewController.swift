@@ -33,7 +33,6 @@ class ViewController: UIViewController,
         )
     }
     
-    
     @objc func handleExternalBirthdayUpdate(_ notification: Notification) {
         guard let updatedEntry = notification.object as? BirthdayEntry else { return }
 

@@ -100,11 +100,9 @@ class SelectAlarm: UITableViewController {
     }
     
     @IBAction func alarmSaveTapped(_ sender: UIButton) {
-        print("✅ 저장 버튼 눌림")
         
         if useSelect.isOn {
             let selectedAlarms = selectedOptions.sorted().map { options[$0] }.joined(separator: ", ")
-            print("✅ 전달할 알람 값: \(selectedAlarms)")
             delegate?.didSelectAlarm(selectedAlarms)
         } else {
             delegate?.didSelectAlarm("선택안함")

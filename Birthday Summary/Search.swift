@@ -4,125 +4,122 @@ class Search: UITableViewController, UISearchBarDelegate, AddDayDelegate {
     
     @IBOutlet weak var searchInput: UISearchBar!
     
-    private var allEntries: [BirthdayEntry] = []
-    private var filteredEntries: [BirthdayEntry] = []
-    private var selectedEntry: BirthdayEntry?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        searchInput.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        allEntries = BirthdayDatabase.shared.fetchAll()
-        searchBar(searchInput, textDidChange: searchInput.text ?? "")
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredEntries = allEntries
-        } else {
-            let keyword = searchText.lowercased()
-            filteredEntries = allEntries.filter {
-                $0.name.lowercased().contains(keyword)      ||
-                $0.nickname.lowercased().contains(keyword)  ||
-                $0.category.lowercased().contains(keyword)  ||
-                $0.like.lowercased().contains(keyword)      ||
-                $0.dislike.lowercased().contains(keyword)   ||
-                $0.solarDate.lowercased().contains(keyword)
+        private var allEntries:      [BirthdayEntry]           = []
+        private var groupedEntries:  [String:[BirthdayEntry]]  = [:]
+        private var sectionTitles:   [String]                  = []
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            searchInput.delegate = self
+        }
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            allEntries = BirthdayDatabase.shared.fetchAll()
+            applyFilter(keyword: searchInput.text ?? "")
+        }
+
+        func searchBar(_ searchBar: UISearchBar, textDidChange text: String) {
+            applyFilter(keyword: text)
+        }
+
+        private func applyFilter(keyword raw: String) {
+            let keyword = raw.lowercased()
+            
+            let filtered: [BirthdayEntry] = {
+                guard !keyword.isEmpty else { return allEntries }
+                return allEntries.filter {
+                    $0.name.lowercased()     .contains(keyword) ||
+                    $0.nickname.lowercased() .contains(keyword) ||
+                    $0.category.lowercased() .contains(keyword) ||
+                    $0.like.lowercased()     .contains(keyword) ||
+                    $0.dislike.lowercased()  .contains(keyword) ||
+                    $0.solarDate.lowercased().contains(keyword)
+                }
+            }()
+
+            groupedEntries = Dictionary(grouping: filtered) { $0.category }
+
+            sectionTitles = groupedEntries.keys.sorted()
+
+            tableView.reloadData()
+        }
+
+        override func numberOfSections(in tableView: UITableView) -> Int {
+           
+            return groupedEntries.isEmpty ? 1 : sectionTitles.count
+        }
+
+        override func tableView(_ tableView: UITableView,
+                                numberOfRowsInSection section: Int) -> Int {
+            guard !groupedEntries.isEmpty else { return 1 }
+            let key = sectionTitles[section]
+            return groupedEntries[key]?.count ?? 0
+        }
+
+        override func tableView(_ tableView: UITableView,
+                                titleForHeaderInSection section: Int) -> String? {
+            return groupedEntries.isEmpty ? nil : sectionTitles[section]
+        }
+
+        override func tableView(_ tableView: UITableView,
+                                cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+            if groupedEntries.isEmpty {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+                cell.textLabel?.text          = "검색 결과가 없어요 😥"
+                cell.textLabel?.textAlignment = .center
+                cell.textLabel?.textColor     = .systemGray
+                cell.detailTextLabel?.text    = nil
+                cell.selectionStyle           = .none
+                return cell
             }
-        }
-        tableView.reloadData()
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredEntries.isEmpty ? 1 : filteredEntries.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if filteredEntries.isEmpty {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
-            cell.textLabel?.text          = "검색 결과가 없어요 😥"
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor     = .systemGray
-            cell.detailTextLabel?.text    = nil
-            cell.selectionStyle           = .none
-            return cell
-        }
-        
-        let cell    = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
-        let entry   = filteredEntries[indexPath.row]
-        let keyword = searchInput.text?.lowercased() ?? ""
-        
-        let baseText = "\(entry.name) (\(entry.nickname))"
-        let attr     = NSMutableAttributedString(string: baseText, attributes: [.foregroundColor: UIColor.label])
-        if !keyword.isEmpty {
-            let nsBase = baseText.lowercased() as NSString
-            let range  = nsBase.range(of: keyword)
-            if range.location != NSNotFound {
+
+            let cell  = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+            let key   = sectionTitles[indexPath.section]
+            let entry = groupedEntries[key]![indexPath.row]
+            let kw    = (searchInput.text ?? "").lowercased()
+
+            let nick = entry.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+            let base = nick.isEmpty ? entry.name : "\(entry.name) (\(nick))"
+
+            let attr = NSMutableAttributedString(string: base,
+                                                 attributes: [.foregroundColor: UIColor.label])
+
+            if !kw.isEmpty, let range = base.lowercased().range(of: kw) {
+                let nsRange = NSRange(range, in: base)
                 attr.addAttributes([
                     .foregroundColor: UIColor.systemBlue,
                     .font: UIFont.boldSystemFont(ofSize: 17)
-                ], range: range)
+                ], range: nsRange)
             }
-        }
-        cell.textLabel?.attributedText = attr
-        cell.textLabel?.textAlignment  = .left
-        
-        var matched = ""
-        if entry.like.lowercased().contains(keyword) {
-            matched = "❤️ " + entry.like
-        } else if entry.dislike.lowercased().contains(keyword) {
-            matched = "💀 " + entry.dislike
-        } else if entry.category.lowercased().contains(keyword) {
-            matched = "🏷️ " + entry.category
-        } else if entry.solarDate.lowercased().contains(keyword) {
-            matched = "📅 " + entry.solarDate
-        }
-        cell.detailTextLabel?.text      = matched
-        cell.detailTextLabel?.textColor = .secondaryLabel
-        cell.selectionStyle             = .none
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard !filteredEntries.isEmpty else { return }
-        let selected = filteredEntries[indexPath.row]
-        let sb = UIStoryboard(name: "Main", bundle: nil)
+            cell.textLabel?.attributedText = attr
 
-        if let nav = sb.instantiateViewController(withIdentifier: "AddDayNavigation") as? UINavigationController,
-           let addVC = nav.topViewController as? AddDay {
-            addVC.editingEntry = selected
-            addVC.delegate = self
+            var subtitle = ""
+            if entry.like.lowercased().contains(kw)      { subtitle = "❤️ " + entry.like      }
+            else if entry.dislike.lowercased().contains(kw) { subtitle = "💀 " + entry.dislike }
+            else if entry.solarDate.lowercased().contains(kw) { subtitle = "📅 " + entry.solarDate }
+            cell.detailTextLabel?.text      = subtitle
+            cell.detailTextLabel?.textColor = .secondaryLabel
+            cell.selectionStyle             = .none
+            return cell
+        }
+
+        override func tableView(_ tableView: UITableView,
+                                didSelectRowAt indexPath: IndexPath) {
+            guard !groupedEntries.isEmpty else { return }
+            let key     = sectionTitles[indexPath.section]
+            let entry   = groupedEntries[key]![indexPath.row]
+
+            let sb      = UIStoryboard(name: "Main", bundle: nil)
+            guard let nav  = sb.instantiateViewController(withIdentifier: "AddDayNavigation") as? UINavigationController,
+                  let add  = nav.topViewController as? AddDay else { return }
+            add.editingEntry = entry
+            add.delegate     = self
             present(nav, animated: true)
         }
-    }
-    
-    func didSaveBirthday(entry: BirthdayEntry) {
-        allEntries.append(entry)
-        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: entry)
-        searchBar(searchInput, textDidChange: searchInput.text ?? "")
-    }
-    
-    func didUpdateBirthday(entry: BirthdayEntry) {
-        print("🎯 수정된 항목: \(entry.name), ID: \(entry.id)")
-        
-        if let idx = allEntries.firstIndex(where: { $0.id == entry.id }) {
-            allEntries[idx] = entry
-            print("✅ 업데이트 성공 – 인덱스: \(idx)")
-        } else {
-            print("⚠️ 업데이트 실패 – 해당 ID 없음")
-        }
 
-        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: entry)
-        searchBar(searchInput, textDidChange: searchInput.text ?? "")
+        func didSaveBirthday(entry: BirthdayEntry)   { allEntries.append(entry); applyFilter(keyword: searchInput.text ?? "") }
+        func didUpdateBirthday(entry: BirthdayEntry) { if let i = allEntries.firstIndex(where: { $0.id == entry.id }) { allEntries[i] = entry }; applyFilter(keyword: searchInput.text ?? "") }
+        func didDeleteBirthday(id: UUID)             { allEntries.removeAll { $0.id == id }; applyFilter(keyword: searchInput.text ?? "") }
     }
-    
-    func didDeleteBirthday(id: UUID) {
-        allEntries.removeAll { $0.id == id }
-        NotificationCenter.default.post(name: .birthdayEntryUpdated, object: id)
-        searchBar(searchInput, textDidChange: searchInput.text ?? "")
-    }
-}
-

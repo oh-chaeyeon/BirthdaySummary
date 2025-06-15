@@ -4,7 +4,6 @@
     <accessibilityOverrides/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -289,6 +288,7 @@
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SGM-tJ-5Ng">
                                                     <rect key="frame" x="20" y="6" width="173" height="48"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="gray" title="취소"/>
                                                     <connections>
@@ -322,6 +322,7 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="trash.fill" catalog="system" id="q1m-MB-blX">
+                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="deleteButtonTapped:" destination="f6r-ki-xSR" id="yh0-L3-Bw0"/>
                             </connections>
@@ -366,13 +367,13 @@
                                                     <rect key="frame" x="44" y="12" width="81" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                    <color key="textColor" name="AccentColor"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8A8-8Q-Y4V">
                                                     <rect key="frame" x="310" y="7" width="49" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="onTintColor" name="AccentColor"/>
+                                                    <color key="onTintColor" red="1" green="0.69769642590000003" blue="0.80113712130000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <connections>
                                                         <action selector="useSelectChanged:" destination="nzE-g6-GcT" eventType="valueChanged" id="fWr-gR-a8M"/>
                                                     </connections>
@@ -475,6 +476,7 @@
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJT-x9-Scy">
                                                     <rect key="frame" x="20" y="6" width="173" height="48"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="filled" title="취소">
                                                         <color key="baseForegroundColor" systemColor="tintColor"/>
@@ -530,7 +532,8 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="98L-Lu-tLa">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="selectedImageTintColor" red="0.95294117649999999" green="0.35294117650000001" blue="0.56862745100000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="Il6-5x-rge"/>
@@ -543,10 +546,10 @@
             </objects>
             <point key="canvasLocation" x="139.69465648854961" y="3.5211267605633805"/>
         </scene>
-        <!--Category-->
+        <!--Category설정-->
         <scene sceneID="3d8-3S-OdJ">
             <objects>
-                <tableViewController id="vT7-0g-oel" customClass="Category" customModule="Birthday_Summary" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="CategoryVC" id="vT7-0g-oel" customClass="Category" customModule="Birthday_Summary" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="kTx-H9-0F3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -569,19 +572,22 @@
                             <outlet property="delegate" destination="vT7-0g-oel" id="CaM-Bk-hWU"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Category" id="ite-Jg-BN1">
+                    <navigationItem key="navigationItem" title="Category설정" id="ite-Jg-BN1">
                         <barButtonItem key="leftBarButtonItem" title="Delete" id="ntc-yd-hPZ">
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="deleteBtn:" destination="vT7-0g-oel" id="LLE-CS-MiH"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="QwT-2j-PaF">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="xGw-EV-Az8" kind="show" identifier="toAddNewCategory" id="reM-5O-26J"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteBtnBarItem" destination="ntc-yd-hPZ" id="6jI-RJ-Zd2"/>
                         <outlet property="tvListView" destination="kTx-H9-0F3" id="GJg-oT-2Ca"/>
                     </connections>
                 </tableViewController>
@@ -592,7 +598,7 @@
         <!--추가 및 수정-->
         <scene sceneID="L7k-H6-2xD">
             <objects>
-                <viewController id="xGw-EV-Az8" customClass="AddCategory" customModule="Birthday_Summary" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddCategoryVC" id="xGw-EV-Az8" customClass="AddCategory" customModule="Birthday_Summary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5r6-mb-3MB">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -695,6 +701,7 @@
                         <searchBar key="tableHeaderView" contentMode="redraw" id="UsB-ry-WbJ">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <outlet property="delegate" destination="YX9-qR-zf4" id="eN2-dK-XeE"/>
@@ -738,7 +745,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7X-jr-zOX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1073" y="1242"/>
+            <point key="canvasLocation" x="1905" y="1242"/>
         </scene>
         <!--일정-->
         <scene sceneID="sjz-O6-ykf">
@@ -765,7 +772,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="일정" id="2K1-Ds-5Vz">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="byf-q8-ZxH">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="dqw-8i-dCY">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="dqw-8i-dCY">
                                 <rect key="frame" x="246" y="6" width="131" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
@@ -803,7 +810,17 @@
                             <outlet property="delegate" destination="9Rc-Wt-Hrz" id="r8s-Zc-3G5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="카테고리 선택" id="VO1-7z-3BH"/>
+                    <navigationItem key="navigationItem" title="카테고리 선택" id="VO1-7z-3BH">
+                        <barButtonItem key="rightBarButtonItem" image="gearshape.fill" catalog="system" id="hsU-1T-dj0">
+                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="moveToCategorySetting:" destination="9Rc-Wt-Hrz" id="2Kb-WH-ahI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="moveSettingbtn" destination="hsU-1T-dj0" id="Fnb-Fh-9u2"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qW0-am-7P4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -885,23 +902,22 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5J9-gK-Qju" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="1242"/>
+            <point key="canvasLocation" x="1073" y="1242"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="v9Q-wt-fxg"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.97254901959999995" green="0.54901960780000003" blue="0.68235294120000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="text.justify" catalog="system" width="128" height="101"/>
         <image name="trash.fill" catalog="system" width="117" height="128"/>
-        <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

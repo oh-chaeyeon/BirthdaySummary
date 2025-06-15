@@ -66,13 +66,12 @@ class AddDay: UITableViewController,
                 setText(userDisLike, entry.dislike)
 
                 selectSolar.text = entry.solarDate
-                selectLunar.text = "(음력 변환 예정)"
+                selectLunar.text = ""
             } else {
                 navigationItem.title  = "정보 추가"
                 saveButton.setTitle("저장", for: .normal)
                 deleteButton.isHidden = true
 
-                // ‘추가’ 모드일 땐 처음에 전달된 날짜 보여주기
                 selectSolar.text = solarDateText
                 selectLunar.text = lunarDateText
             }
@@ -110,69 +109,98 @@ class AddDay: UITableViewController,
     }
 
     func didSelectAlarm(_ value:String){
-        print("📌 AddDay에서 받은 알람 값: \(value)")
         selectedAlarm = value
         alarmResultLabel.text = value
     }
 
     func didPickCategory(_ item: CategoryItem) {
-        print("✅ 선택된 카테고리: \(item.name), 색상: \(item.color.toHexString())")
-
         pickedCategory = item
         refreshCategoryUI()
     }
 
-    // MARK: - 저장·삭제
     @IBAction func saveButtonTapped(_ sender: UIButton) {
+        guard let nameText = userName.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+                 !nameText.isEmpty else {
+           let alert = UIAlertController(title: "이름을 입력해주세요",
+                                         message: "이름은 필수 항목입니다.",
+                                         preferredStyle: .alert)
+           alert.addAction(UIAlertAction(title: "확인", style: .default))
+           present(alert, animated: true)
+           return
+       }
 
-        let entry = BirthdayEntry(
-            id:          editingEntry?.id ?? UUID(),
-            name:        userName.text ?? "",
-            nickname:    userNickname.text ?? "",
-            categoryID:  pickedCategory.id,
-            category:    pickedCategory.name,
-            categoryColorHex: pickedCategory.color.toHexString(),
-            solarDate:   selectSolar.text ?? "",
-            alarm:       selectedAlarm ?? "없음",
-            like:        userLike.textColor == .lightGray ? "" : userLike.text,
-            dislike:     userDisLike.textColor == .lightGray ? "" : userDisLike.text
-        )
+       let entry = BirthdayEntry(
+           id: editingEntry?.id ?? UUID(),
+           name: nameText,
+           nickname: userNickname.text ?? "",
+           categoryID: pickedCategory.id,
+           category: pickedCategory.name,
+           categoryColorHex: pickedCategory.color.toHexString(),
+           solarDate: selectSolar.text ?? "",
+           alarm: selectedAlarm ?? "없음",
+           like: userLike.textColor == .lightGray ? "" : userLike.text,
+           dislike: userDisLike.textColor == .lightGray ? "" : userDisLike.text
+       )
 
-        if editingEntry == nil {
-            BirthdayDatabase.shared.insert(entry)
-            delegate?.didSaveBirthday(entry: entry)
-        } else {
-            BirthdayDatabase.shared.update(entry)
-            delegate?.didUpdateBirthday(entry: entry)
-        }
-        dismiss(animated: true)
+       if editingEntry == nil {
+           BirthdayDatabase.shared.insert(entry)
+           delegate?.didSaveBirthday(entry: entry)
+
+           let today = currentFormattedDate()
+           if entry.solarDate == today {
+               NotificationManager.shared.schedule(entry: entry, daysBefore: 0, testImmediate: true)
+           }
+       } else {
+           BirthdayDatabase.shared.update(entry)
+           delegate?.didUpdateBirthday(entry: entry)
+       }
+
+       dismiss(animated: true)
+    }
+
+    private func currentFormattedDate() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "M월 d일"
+        return formatter.string(from: Date())
     }
     
     @IBAction func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        guard let editing = editingEntry else { return }
-        BirthdayDatabase.shared.delete(id: editing.id)
-        delegate?.didDeleteBirthday(id: editing.id)
-        dismiss(animated:true)
+       let alert = UIAlertController(
+           title: "정말 삭제하시겠습니까?",
+           message: "삭제하면 되돌릴 수 없습니다.",
+           preferredStyle: .alert
+       )
+        
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            guard let editing = self.editingEntry else { return }
+            BirthdayDatabase.shared.delete(id: editing.id)
+            self.delegate?.didDeleteBirthday(id: editing.id)
+            self.dismiss(animated: true)
+        }
+
+       let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+       
+       alert.addAction(deleteAction)
+       alert.addAction(cancelAction)
+       
+       present(alert, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSelectCategory" {
             if let nav = segue.destination as? UINavigationController,
                let catVC = nav.topViewController as? SelectCategory {
-                print("📦 delegate 연결: NavigationController → SelectCategory")
                 catVC.delegate = self
             } else if let catVC = segue.destination as? SelectCategory {
-                print("📦 delegate 연결: Direct → SelectCategory")
                 catVC.delegate = self
             }
 
         } else if segue.identifier == "toAlarm" {
             if let nav = segue.destination as? UINavigationController,
                let alarmVC = nav.topViewController as? SelectAlarm {
-                print("🔔 delegate 연결: NavigationController → SelectAlarm")
                 alarmVC.delegate = self
             } else if let alarmVC = segue.destination as? SelectAlarm {
-                print("🔔 delegate 연결: Direct → SelectAlarm")
                 alarmVC.delegate = self
             }
         }

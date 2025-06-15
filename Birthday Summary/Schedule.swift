@@ -35,7 +35,6 @@ final class Schedule: UITableViewController, AddDayDelegate {
     private func reloadAndGroup() {
         
         let all = BirthdayDatabase.shared.fetchAll()
-
         let df        = DateFormatter()
         df.locale     = Locale(identifier: "ko_KR")
         df.dateFormat = "M월 d일"
@@ -78,7 +77,10 @@ final class Schedule: UITableViewController, AddDayDelegate {
     
     func didSaveBirthday(entry: BirthdayEntry)   { reloadAndGroup() }
     func didUpdateBirthday(entry: BirthdayEntry) { reloadAndGroup() }
-    func didDeleteBirthday(id: UUID)             { reloadAndGroup() }
+    func didDeleteBirthday(id: UUID) {
+        reloadAndGroup()
+    }
+
     
     override func numberOfSections(in _: UITableView) -> Int { grouped.count }
     
@@ -119,5 +121,10 @@ final class Schedule: UITableViewController, AddDayDelegate {
         add.editingEntry = e
         add.delegate     = self
         present(nav, animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadAndGroup()         
     }
 }

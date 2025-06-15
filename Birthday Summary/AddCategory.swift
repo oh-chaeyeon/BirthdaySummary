@@ -15,6 +15,7 @@ class AddCategory: UIViewController {
     var initialName: String?
     
     var editingItem: CategoryItem?
+    var returnToSelectCategory = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
